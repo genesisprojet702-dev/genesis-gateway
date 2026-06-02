@@ -1,47 +1,40 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { User, Mail, Lock, Eye, EyeOff, ChevronRight, Shield, Diamond, Zap } from "lucide-react";
-import hero from "@/assets/genesis-hero.jpg";
+import { Mail, Lock, Eye, EyeOff, ChevronRight, Shield, Diamond, Zap } from "lucide-react";
+import hero from "@/assets/genesis-login-hero.jpg";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
-      { title: "Genesis — Créer votre compte" },
-      { name: "description", content: "Rejoignez Genesis. Accédez à vos cartes, votre espace IA et vos récompenses." },
+      { title: "Genesis — Se connecter" },
+      { name: "description", content: "Reconnectez-vous à votre compte Genesis et continuez votre évolution." },
     ],
   }),
-  component: SignUp,
+  component: Login,
 });
 
-function SignUp() {
+function Login() {
   const [showPw, setShowPw] = useState(false);
-  const [showPw2, setShowPw2] = useState(false);
 
   return (
     <div className="dark relative min-h-screen w-full overflow-x-hidden bg-background text-foreground">
-      {/* Mockup hero as fixed cover background */}
       <div
         className="pointer-events-none fixed inset-0 bg-cover bg-top bg-no-repeat"
         style={{ backgroundImage: `url(${hero})` }}
         aria-hidden
       />
-      {/* Bottom fade so form area is readable */}
       <div className="pointer-events-none fixed inset-x-0 bottom-0 h-[60vh] bg-gradient-to-b from-transparent via-background/70 to-background" aria-hidden />
 
       <main className="relative z-10 mx-auto flex min-h-screen w-full max-w-md flex-col px-6">
-        {/* Top spacer reserves space for hero (logo + GENESIS + title baked in image) */}
-        <div className="h-[52vh] shrink-0" />
+        <div className="h-[54vh] shrink-0" />
 
-        {/* Form panel */}
         <section className="glass-panel relative mt-2 rounded-2xl p-5">
-          {/* diamond corner accents */}
           <DiamondCorner className="-left-1.5 -top-1.5" />
           <DiamondCorner className="-right-1.5 -top-1.5" />
           <DiamondCorner className="-bottom-1.5 -left-1.5" />
           <DiamondCorner className="-bottom-1.5 -right-1.5" />
 
           <form className="flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
-            <Field icon={<User strokeWidth={1.5} className="h-5 w-5" />} placeholder="Nom d'utilisateur" type="text" />
             <Field icon={<Mail strokeWidth={1.5} className="h-5 w-5" />} placeholder="Adresse e-mail" type="email" />
             <Field
               icon={<Lock strokeWidth={1.5} className="h-5 w-5" />}
@@ -58,35 +51,24 @@ function SignUp() {
                 </button>
               }
             />
-            <Field
-              icon={<Lock strokeWidth={1.5} className="h-5 w-5" />}
-              placeholder="Confirmer le mot de passe"
-              type={showPw2 ? "text" : "password"}
-              trailing={
-                <button
-                  type="button"
-                  onClick={() => setShowPw2((s) => !s)}
-                  className="text-cyan-glow/70 transition hover:text-cyan-glow"
-                  aria-label="Afficher le mot de passe"
-                >
-                  {showPw2 ? <EyeOff strokeWidth={1.5} className="h-5 w-5" /> : <Eye strokeWidth={1.5} className="h-5 w-5" />}
-                </button>
-              }
-            />
 
-            {/* Primary button — icy blue */}
+            <div className="-mt-1 flex justify-end">
+              <a href="#" className="text-xs text-cyan-glow/80 hover:text-cyan-glow transition">
+                Mot de passe oublié ?
+              </a>
+            </div>
+
             <button
               type="submit"
               className="ice-button group relative mt-2 h-14 w-full overflow-hidden rounded-xl transition-transform active:scale-[0.98]"
             >
               <span className="absolute inset-0 shimmer" />
               <span className="relative flex h-full items-center justify-center gap-3 font-display text-[15px] font-bold uppercase tracking-[0.18em] text-white">
-                Créer mon compte
+                Se connecter
                 <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
               </span>
             </button>
 
-            {/* Divider */}
             <div className="my-3 flex items-center gap-3">
               <span className="h-px flex-1 bg-gradient-to-r from-transparent to-cyan-glow/40" />
               <span className="h-1.5 w-1.5 rotate-45 bg-cyan-glow/70" />
@@ -95,25 +77,23 @@ function SignUp() {
               <span className="h-px flex-1 bg-gradient-to-l from-transparent to-cyan-glow/40" />
             </div>
 
-            {/* Socials */}
             <div className="grid grid-cols-2 gap-3">
               <SocialButton provider="google" />
               <SocialButton provider="facebook" />
             </div>
 
             <div className="mt-4 text-center text-sm">
-              <p className="text-muted-foreground">Déjà un compte ?</p>
+              <p className="text-muted-foreground">Pas encore de compte ?</p>
               <Link
-                to="/login"
+                to="/"
                 className="mt-1 inline-flex items-center gap-1 font-display text-sm font-bold tracking-[0.25em] text-cyan-glow text-glow hover:text-white transition"
               >
-                SE CONNECTER <ChevronRight className="h-4 w-4" />
+                CRÉER UN COMPTE <ChevronRight className="h-4 w-4" />
               </Link>
             </div>
           </form>
         </section>
 
-        {/* Bottom features bar */}
         <footer className="relative mb-6 mt-6 w-full">
           <div className="glass-panel relative rounded-xl px-4 py-3">
             <DiamondCorner className="-left-1 -top-1 scale-75" />
