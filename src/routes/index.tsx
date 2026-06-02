@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { User, Mail, Lock, Eye, EyeOff, ChevronRight, Shield, Diamond, Zap } from "lucide-react";
 import hero from "@/assets/genesis-hero.jpg";
