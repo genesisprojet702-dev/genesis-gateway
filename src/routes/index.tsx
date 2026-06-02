@@ -103,12 +103,12 @@ function SignUp() {
 
             <div className="mt-4 text-center text-sm">
               <p className="text-muted-foreground">Déjà un compte ?</p>
-              <a
-                href="#"
+              <Link
+                to="/login"
                 className="mt-1 inline-flex items-center gap-1 font-display text-sm font-bold tracking-[0.25em] text-cyan-glow text-glow hover:text-white transition"
               >
                 SE CONNECTER <ChevronRight className="h-4 w-4" />
-              </a>
+              </Link>
             </div>
           </form>
         </section>
