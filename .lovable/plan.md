@@ -1,47 +1,54 @@
-## Objectif
 
-Reproduire fidèlement le design de l'image envoyée (logo cristal bleu Genesis, fond cosmique sombre avec éclats latéraux, titre "CRÉER VOTRE COMPTE", champs, bouton bleu glacé, Google/Facebook, bandeau bas) tout en gardant les champs **fonctionnels** (saisie, toggle œil mot de passe, etc.).
+# Plan — Corrections + animations holographiques
 
-## Approche
+Réponse honnête sur mes capacités : oui, je peux faire les 3 choses. Je ne peux pas garantir un rendu pixel-perfect 100% identique à l'image (les inputs/boutons sont reconstruits en HTML/CSS pour rester fonctionnels), mais je peux utiliser **ton image comme fond fixe pleine page** pour la page `/login` afin que le logo, le wordmark "GENESIS", le texte "BON RETOUR", les vagues bleues latérales et le halo circulaire soient **exactement ceux de ton image**. Les champs et boutons sont ensuite superposés par-dessus, positionnés pour s'aligner sur les cases de l'image — visuellement quasi identique, mais 100% fonctionnel.
 
-1. **Utiliser l'image uploadée comme asset de référence visuel**
-   - Uploader `file_00000000e6ec7246a0a7dbf15ec26918.png` via `lovable-assets` → pointer dans `src/assets/`.
-   - En extraire le **logo Genesis ailé** (recadré) et le **fond cosmique** (recadré) pour les utiliser comme images réelles dans la page, plutôt que de re-générer.
-   - Alternative plus simple : utiliser l'image entière en background décoratif et superposer uniquement les éléments interactifs (inputs, boutons) parfaitement alignés. Je propose plutôt l'extraction (option 1) pour garder une mise en page responsive propre.
+## 1. Bug eye / EyeOff (inscription + connexion)
 
-2. **Refonte `src/routes/index.tsx`** pour matcher le mockup :
-   - Logo ailé cristal (image extraite) + wordmark "GENESIS" chromé argenté (remplace le titre Orbitron bleu actuel par un rendu plus métallique, ou image).
-   - Sous-titre "**CRÉER** VOTRE COMPTE" (bleu + blanc) + tagline "Accédez à vos cartes, votre espace IA et vos récompenses."
-   - Panneau verre avec coins à losanges (◇ aux 4 coins comme sur l'image).
-   - 4 champs : Nom d'utilisateur, Adresse e-mail, Mot de passe (œil), Confirmer le mot de passe (œil) — icônes outline fines bleues, placeholders gris.
-   - Bouton "CRÉER MON COMPTE" : dégradé bleu glacé avec texture, bordure lumineuse, flèche.
-   - Séparateur "OU" avec losanges.
-   - Boutons "Continuer avec Google" / "Continuer avec Facebook" (logos officiels colorés, fond noir verre).
-   - Lien "Déjà un compte ? **SE CONNECTER ›**".
-   - Bandeau bas avec bordure fine et 3 chips : 🛡 SÉCURISÉ — ◆ VOTRE UNIVERS — ⚡ SANS LIMITES.
+Logique inversée actuellement. Correction :
+- Œil **ouvert** (`Eye`) → mot de passe **visible** (type=text)
+- Œil **barré** (`EyeOff`) → mot de passe **masqué** (type=password, points)
 
-3. **Ajustements `src/styles.css`** :
-   - Wordmark argent chromé (gradient blanc/gris + text-stroke).
-   - Bouton primaire avec texture bleu glacé plus marquée (gradient + noise/shine).
-   - Coins en losanges (pseudo-éléments rotate-45).
+Fichiers : `src/routes/index.tsx`, `src/routes/login.tsx`.
 
-## Points techniques
+## 2. Page `/login` refaite à l'identique de l'image
 
-- Pas de backend / Supabase (respect de la consigne précédente).
-- Champs gardent leur état React (`useState`) et toggles œil.
-- Aucune modification de la logique de routing.
+Approche : **uploader ton image fournie** comme asset CDN, l'utiliser en `background` plein écran `cover` + `top`, puis superposer uniquement les éléments interactifs aux bons endroits.
+
+- Upload de `user-uploads://file_0000000085f4720a83807464b3a1b94e.png` via `lovable-assets` → `src/assets/genesis-login-bg.png.asset.json`
+- Remplace l'ancienne hero `genesis-login-hero.jpg` (supprimée)
+- Layout : image en fond fixe, container `max-w-md` centré, espace vide en haut pour laisser apparaître logo + "BON RETOUR" de l'image
+- Champs superposés (email, mot de passe, confirmer mot de passe — comme sur ton image) en style verre transparent pour laisser transparaître le fond
+- Bouton "SE CONNECTER" en glass transparent par-dessus le bouton bleu de l'image
+- Liens Google / Facebook, "CRÉER UN COMPTE", barre bottom : positionnés sur les éléments correspondants
+- Suppression du bloc texte "BON RETOUR" en React (déjà dans l'image)
+
+Note : la page contient bien 3 champs comme dans ton image (email + mot de passe + confirmer mot de passe).
+
+## 3. Micro-animations holographiques
+
+CSS pur (pas de lib), ajoutés dans `src/styles.css` :
+
+- **Au chargement** :
+  - `fade-in` + `translateY` doux sur le panel formulaire (stagger sur les champs)
+  - Halo holographique pulsant derrière le logo (`hologram-pulse` : opacity 0.4 → 0.8, scale 1 → 1.05, 4s)
+  - Particules bleues flottantes (3-4 spans en `position:absolute`, animation `float` aléatoire)
+  - Ligne de scan holographique qui traverse le panel une fois (`scan-line` 1.5s)
+
+- **Au hover** :
+  - Champs : bordure cyan s'illumine + reflet diagonal qui glisse (`shine` 0.8s)
+  - Boutons sociaux : léger `scale(1.02)` + glow cyan
+  - Bouton principal "SE CONNECTER" : intensification du shimmer + glow renforcé
+  - Logo (hover sur le hero) : rotation lumineuse subtile du halo
+
+- **Au focus** des inputs : pulse cyan sur l'icône gauche
 
 ## Fichiers touchés
 
-- `src/assets/genesis-mockup.png.asset.json` (nouvel asset CDN depuis l'upload)
-- éventuellement `src/assets/genesis-logo-v2.png.asset.json` (logo recadré via edit_image)
-- `src/routes/index.tsx` (refonte JSX)
-- `src/styles.css` (wordmark chromé + bouton glacé + coins losange)
+- `src/routes/login.tsx` — refonte complète (image comme fond, eye fixé)
+- `src/routes/index.tsx` — eye fixé + classes d'animation hover
+- `src/styles.css` — keyframes : `hologram-pulse`, `float-particle`, `scan-line`, `shine`, `fade-in-up`
+- `src/assets/genesis-login-bg.png.asset.json` — nouveau (upload de ton image)
+- `src/assets/genesis-login-hero.jpg` — supprimé
 
-## Question avant de coder
-
-Préfères-tu :
-- **A)** Que j'utilise **l'image entière** comme fond fixe et que je superpose uniquement les 4 champs + boutons interactifs par-dessus (rendu pixel-perfect identique au mockup, mais moins flexible si on change de taille d'écran), ou
-- **B)** Que j'**extraie le logo + fond** et que je **reconstruise** les champs/boutons en HTML/CSS stylés pour matcher visuellement (responsive propre, plus maintenable, ~98% fidèle) ?
-
-Je recommande **B**. Dis-moi ton choix et je lance l'implémentation.
+Aucun changement backend, aucune base de données.

@@ -133,4 +133,49 @@
       0 10px 30px oklch(0.6 0.22 245 / 0.5),
       0 0 40px oklch(0.78 0.18 215 / 0.35);
   }
+
+  /* Holographic shine reflection that crosses fields on hover */
+  .holo-field .holo-shine {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(115deg, transparent 30%, oklch(0.92 0.12 215 / 0.18) 50%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform 0.9s ease;
+  }
+  .holo-field:hover .holo-shine,
+  .holo-field:focus-within .holo-shine {
+    transform: translateX(120%);
+  }
+
+  /* Drifting holo particles */
+  @keyframes holo-float {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.0; }
+    20% { opacity: 0.6; }
+    50% { transform: translateY(-30px) scale(1.4); opacity: 0.9; }
+    80% { opacity: 0.5; }
+  }
+  .holo-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 9999px;
+    background: oklch(0.92 0.12 215);
+    box-shadow: 0 0 12px oklch(0.85 0.16 215 / 0.9), 0 0 24px oklch(0.62 0.22 250 / 0.6);
+    animation: holo-float 7s ease-in-out infinite;
+  }
+
+  /* Panel rises on mount */
+  @keyframes holo-rise {
+    0% { opacity: 0; transform: translateY(18px); filter: blur(6px); }
+    100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+  }
+  .holo-rise { animation: holo-rise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+
+  /* Scan-line sweep that runs once on load on top of the page */
+  @keyframes holo-scan {
+    0% { transform: translateY(-10%); opacity: 0; }
+    20% { opacity: 0.6; }
+    100% { transform: translateY(110vh); opacity: 0; }
+  }
 }
