@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { User, Mail, Lock, Eye, EyeOff, ChevronRight, Shield, Diamond, Zap } from "lucide-react";
-import hero from "@/assets/genesis-hero.jpg";
+import heroAsset from "@/assets/genesis-hero.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -22,7 +22,7 @@ function SignUp() {
       {/* Mockup hero as fixed cover background */}
       <div
         className="pointer-events-none fixed inset-0 bg-cover bg-top bg-no-repeat"
-        style={{ backgroundImage: `url(${hero})` }}
+        style={{ backgroundImage: `url(${heroAsset.url})` }}
         aria-hidden
       />
       {/* Bottom fade so form area is readable */}
