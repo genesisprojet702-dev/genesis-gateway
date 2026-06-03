@@ -1,54 +1,27 @@
 
-# Plan — Corrections + animations holographiques
+# Correction de la page `/login` — champs opaques
 
-Réponse honnête sur mes capacités : oui, je peux faire les 3 choses. Je ne peux pas garantir un rendu pixel-perfect 100% identique à l'image (les inputs/boutons sont reconstruits en HTML/CSS pour rester fonctionnels), mais je peux utiliser **ton image comme fond fixe pleine page** pour la page `/login` afin que le logo, le wordmark "GENESIS", le texte "BON RETOUR", les vagues bleues latérales et le halo circulaire soient **exactement ceux de ton image**. Les champs et boutons sont ensuite superposés par-dessus, positionnés pour s'aligner sur les cases de l'image — visuellement quasi identique, mais 100% fonctionnel.
+## Problème
 
-## 1. Bug eye / EyeOff (inscription + connexion)
+Sur `/login`, l'image de fond contient déjà un formulaire dessiné (email, mot de passe, boutons…). Les champs React superposés sont transparents (`glass-input` translucide), donc on voit en double le formulaire de l'image derrière les vrais champs. Sur `/` (Créer un compte), les champs sont opaques noirs et c'est le rendu attendu.
 
-Logique inversée actuellement. Correction :
-- Œil **ouvert** (`Eye`) → mot de passe **visible** (type=text)
-- Œil **barré** (`EyeOff`) → mot de passe **masqué** (type=password, points)
+## Solution
 
-Fichiers : `src/routes/index.tsx`, `src/routes/login.tsx`.
+Garder l'image de fond uniquement comme décor pour le **haut** (logo Genesis + halo + wordmark + "BON RETOUR"), et masquer tout le bas de l'image avec un panneau opaque qui contient les vrais champs interactifs — exactement comme sur la page Créer un compte.
 
-## 2. Page `/login` refaite à l'identique de l'image
+### Changements dans `src/routes/login.tsx`
 
-Approche : **uploader ton image fournie** comme asset CDN, l'utiliser en `background` plein écran `cover` + `top`, puis superposer uniquement les éléments interactifs aux bons endroits.
+1. **Ajouter un dégradé masquant** au-dessus de l'image de fond, depuis ~55% de la hauteur jusqu'en bas : noir opaque (`var(--background)`) pour cacher complètement le formulaire dessiné dans l'image. Le haut reste 100% visible (logo + "BON RETOUR").
+2. **Envelopper le formulaire dans un `glass-panel` opaque** (même style que le panneau de `/` — fond sombre, bordure cyan subtile, blur, shadow) au lieu du conteneur transparent actuel.
+3. **Rendre les champs `.glass-input` réellement opaques** (déjà le cas via la classe, mais s'assurer qu'aucune transparence parente ne les laisse voir le fond).
+4. Conserver toutes les animations holographiques, l'œil corrigé, les boutons sociaux, le lien "Créer un compte" et la barre de chips bottom.
 
-- Upload de `user-uploads://file_0000000085f4720a83807464b3a1b94e.png` via `lovable-assets` → `src/assets/genesis-login-bg.png.asset.json`
-- Remplace l'ancienne hero `genesis-login-hero.jpg` (supprimée)
-- Layout : image en fond fixe, container `max-w-md` centré, espace vide en haut pour laisser apparaître logo + "BON RETOUR" de l'image
-- Champs superposés (email, mot de passe, confirmer mot de passe — comme sur ton image) en style verre transparent pour laisser transparaître le fond
-- Bouton "SE CONNECTER" en glass transparent par-dessus le bouton bleu de l'image
-- Liens Google / Facebook, "CRÉER UN COMPTE", barre bottom : positionnés sur les éléments correspondants
-- Suppression du bloc texte "BON RETOUR" en React (déjà dans l'image)
+### Aucun autre changement
 
-Note : la page contient bien 3 champs comme dans ton image (email + mot de passe + confirmer mot de passe).
+- Pas de modification de `/` (Créer un compte).
+- Pas de modification du backend, des assets, ni de `src/styles.css` (les classes existent déjà).
+- Pas de base de données.
 
-## 3. Micro-animations holographiques
+## Fichier touché
 
-CSS pur (pas de lib), ajoutés dans `src/styles.css` :
-
-- **Au chargement** :
-  - `fade-in` + `translateY` doux sur le panel formulaire (stagger sur les champs)
-  - Halo holographique pulsant derrière le logo (`hologram-pulse` : opacity 0.4 → 0.8, scale 1 → 1.05, 4s)
-  - Particules bleues flottantes (3-4 spans en `position:absolute`, animation `float` aléatoire)
-  - Ligne de scan holographique qui traverse le panel une fois (`scan-line` 1.5s)
-
-- **Au hover** :
-  - Champs : bordure cyan s'illumine + reflet diagonal qui glisse (`shine` 0.8s)
-  - Boutons sociaux : léger `scale(1.02)` + glow cyan
-  - Bouton principal "SE CONNECTER" : intensification du shimmer + glow renforcé
-  - Logo (hover sur le hero) : rotation lumineuse subtile du halo
-
-- **Au focus** des inputs : pulse cyan sur l'icône gauche
-
-## Fichiers touchés
-
-- `src/routes/login.tsx` — refonte complète (image comme fond, eye fixé)
-- `src/routes/index.tsx` — eye fixé + classes d'animation hover
-- `src/styles.css` — keyframes : `hologram-pulse`, `float-particle`, `scan-line`, `shine`, `fade-in-up`
-- `src/assets/genesis-login-bg.png.asset.json` — nouveau (upload de ton image)
-- `src/assets/genesis-login-hero.jpg` — supprimé
-
-Aucun changement backend, aucune base de données.
+- `src/routes/login.tsx` — ajout du masque dégradé + wrapping `glass-panel` autour du formulaire.
