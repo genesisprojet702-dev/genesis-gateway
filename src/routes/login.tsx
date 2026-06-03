@@ -76,8 +76,9 @@ function Login() {
               trailing={
                 <button
                   type="button"
-                  onClick={() => setShowPw2((s) => !s)}
-                  className="text-cyan-glow/70 transition hover:text-cyan-glow"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={(e) => { e.stopPropagation(); setShowPw2((s) => !s); }}
+                  className="relative z-10 text-cyan-glow/70 transition hover:text-cyan-glow"
                   aria-label={showPw2 ? "Masquer le mot de passe" : "Afficher le mot de passe"}
                 >
                   {showPw2 ? <Eye strokeWidth={1.5} className="h-5 w-5" /> : <EyeOff strokeWidth={1.5} className="h-5 w-5" />}
