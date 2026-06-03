@@ -47,10 +47,10 @@ function Login() {
 
       <main className="relative z-10 mx-auto flex min-h-screen w-full max-w-md flex-col px-6">
         {/* Reserve space for logo + GENESIS + "BON RETOUR" baked into the image */}
-        <div className="h-[58vh] shrink-0" />
+        <div className="h-[48vh] shrink-0" />
 
-        {/* Transparent overlay form — sits on top of the image's panel */}
-        <section className="holo-rise relative mt-2 rounded-2xl">
+        {/* Opaque panel — matches the signup page's glass-panel style */}
+        <section className="holo-rise glass-panel relative mt-2 rounded-2xl p-5">
           <form className="flex flex-col gap-3 p-2" onSubmit={(e) => e.preventDefault()}>
             <Field icon={<Mail strokeWidth={1.5} className="h-5 w-5" />} placeholder="Adresse e-mail" type="email" />
             <Field
