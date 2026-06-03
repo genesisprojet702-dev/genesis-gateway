@@ -28,7 +28,7 @@ function Login() {
 
       {/* Opaque mask covering the bottom half of the background image (hides the baked-in form) */}
       <div
-        className="pointer-events-none fixed inset-x-0 bottom-0 top-[52vh]"
+        className="pointer-events-none fixed inset-x-0 bottom-0 top-[36vh]"
         style={{
           background:
             "linear-gradient(180deg, transparent 0%, oklch(0.08 0.015 250 / 0.55) 10%, var(--background) 28%, var(--background) 100%)",
