@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Mail, Lock, Eye, EyeOff, ChevronRight, Shield, Diamond, Zap } from "lucide-react";
-import hero from "@/assets/genesis-login-hero.jpg";
+import bgAsset from "@/assets/genesis-login-bg.png.asset.json";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -15,26 +15,33 @@ export const Route = createFileRoute("/login")({
 
 function Login() {
   const [showPw, setShowPw] = useState(false);
+  const [showPw2, setShowPw2] = useState(false);
 
   return (
-    <div className="dark relative min-h-screen w-full overflow-x-hidden bg-background text-foreground">
+    <div className="dark relative min-h-screen w-full overflow-x-hidden bg-black text-foreground">
+      {/* Full mockup image as fixed background — matches user reference 1:1 */}
       <div
-        className="pointer-events-none fixed inset-0 bg-cover bg-top bg-no-repeat"
-        style={{ backgroundImage: `url(${hero})` }}
+        className="pointer-events-none fixed inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${bgAsset.url})` }}
         aria-hidden
       />
-      <div className="pointer-events-none fixed inset-x-0 bottom-0 h-[60vh] bg-gradient-to-b from-transparent via-background/70 to-background" aria-hidden />
+
+      {/* Holographic ambient layers */}
+      <div className="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden>
+        <span className="holo-particle" style={{ left: "8%", top: "18%", animationDelay: "0s" }} />
+        <span className="holo-particle" style={{ left: "82%", top: "26%", animationDelay: "1.4s" }} />
+        <span className="holo-particle" style={{ left: "15%", top: "70%", animationDelay: "2.6s" }} />
+        <span className="holo-particle" style={{ left: "78%", top: "78%", animationDelay: "3.8s" }} />
+        <span className="holo-particle" style={{ left: "50%", top: "12%", animationDelay: "0.8s" }} />
+      </div>
 
       <main className="relative z-10 mx-auto flex min-h-screen w-full max-w-md flex-col px-6">
-        <div className="h-[54vh] shrink-0" />
+        {/* Reserve space for logo + GENESIS + "BON RETOUR" baked into the image */}
+        <div className="h-[58vh] shrink-0" />
 
-        <section className="glass-panel relative mt-2 rounded-2xl p-5">
-          <DiamondCorner className="-left-1.5 -top-1.5" />
-          <DiamondCorner className="-right-1.5 -top-1.5" />
-          <DiamondCorner className="-bottom-1.5 -left-1.5" />
-          <DiamondCorner className="-bottom-1.5 -right-1.5" />
-
-          <form className="flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
+        {/* Transparent overlay form — sits on top of the image's panel */}
+        <section className="holo-rise relative mt-2 rounded-2xl">
+          <form className="flex flex-col gap-3 p-2" onSubmit={(e) => e.preventDefault()}>
             <Field icon={<Mail strokeWidth={1.5} className="h-5 w-5" />} placeholder="Adresse e-mail" type="email" />
             <Field
               icon={<Lock strokeWidth={1.5} className="h-5 w-5" />}
@@ -45,35 +52,43 @@ function Login() {
                   type="button"
                   onClick={() => setShowPw((s) => !s)}
                   className="text-cyan-glow/70 transition hover:text-cyan-glow"
-                  aria-label="Afficher le mot de passe"
+                  aria-label={showPw ? "Masquer le mot de passe" : "Afficher le mot de passe"}
                 >
-                  {showPw ? <EyeOff strokeWidth={1.5} className="h-5 w-5" /> : <Eye strokeWidth={1.5} className="h-5 w-5" />}
+                  {showPw ? <Eye strokeWidth={1.5} className="h-5 w-5" /> : <EyeOff strokeWidth={1.5} className="h-5 w-5" />}
+                </button>
+              }
+            />
+            <Field
+              icon={<Lock strokeWidth={1.5} className="h-5 w-5" />}
+              placeholder="Confirmer le mot de passe"
+              type={showPw2 ? "text" : "password"}
+              trailing={
+                <button
+                  type="button"
+                  onClick={() => setShowPw2((s) => !s)}
+                  className="text-cyan-glow/70 transition hover:text-cyan-glow"
+                  aria-label={showPw2 ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                >
+                  {showPw2 ? <Eye strokeWidth={1.5} className="h-5 w-5" /> : <EyeOff strokeWidth={1.5} className="h-5 w-5" />}
                 </button>
               }
             />
 
-            <div className="-mt-1 flex justify-end">
-              <a href="#" className="text-xs text-cyan-glow/80 hover:text-cyan-glow transition">
-                Mot de passe oublié ?
-              </a>
-            </div>
-
             <button
               type="submit"
-              className="ice-button group relative mt-2 h-14 w-full overflow-hidden rounded-xl transition-transform active:scale-[0.98]"
+              className="group relative mt-1 h-14 w-full overflow-hidden rounded-xl border border-cyan-glow/60 bg-transparent transition-transform hover:scale-[1.01] active:scale-[0.98]"
+              aria-label="Se connecter"
             >
               <span className="absolute inset-0 shimmer" />
-              <span className="relative flex h-full items-center justify-center gap-3 font-display text-[15px] font-bold uppercase tracking-[0.18em] text-white">
+              <span className="relative flex h-full items-center justify-center gap-3 font-display text-[15px] font-bold uppercase tracking-[0.18em] text-white text-glow">
                 Se connecter
                 <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
               </span>
             </button>
 
-            <div className="my-3 flex items-center gap-3">
+            <div className="my-2 flex items-center gap-3">
               <span className="h-px flex-1 bg-gradient-to-r from-transparent to-cyan-glow/40" />
-              <span className="h-1.5 w-1.5 rotate-45 bg-cyan-glow/70" />
               <span className="text-xs tracking-[0.35em] text-muted-foreground">OU</span>
-              <span className="h-1.5 w-1.5 rotate-45 bg-cyan-glow/70" />
               <span className="h-px flex-1 bg-gradient-to-l from-transparent to-cyan-glow/40" />
             </div>
 
@@ -82,7 +97,7 @@ function Login() {
               <SocialButton provider="facebook" />
             </div>
 
-            <div className="mt-4 text-center text-sm">
+            <div className="mt-3 text-center text-sm">
               <p className="text-muted-foreground">Pas encore de compte ?</p>
               <Link
                 to="/"
@@ -96,8 +111,6 @@ function Login() {
 
         <footer className="relative mb-6 mt-6 w-full">
           <div className="glass-panel relative rounded-xl px-4 py-3">
-            <DiamondCorner className="-left-1 -top-1 scale-75" />
-            <DiamondCorner className="-right-1 -top-1 scale-75" />
             <div className="grid grid-cols-3 gap-2 text-[10px] tracking-[0.22em] text-muted-foreground">
               <FeatureChip icon={<Shield strokeWidth={1.5} className="h-3.5 w-3.5" />} label="SÉCURISÉ" />
               <FeatureChip icon={<Diamond strokeWidth={1.5} className="h-3.5 w-3.5" />} label="VOTRE UNIVERS" />
@@ -107,15 +120,6 @@ function Login() {
         </footer>
       </main>
     </div>
-  );
-}
-
-function DiamondCorner({ className = "" }: { className?: string }) {
-  return (
-    <span
-      className={`pointer-events-none absolute h-2.5 w-2.5 rotate-45 border border-cyan-glow/70 bg-background/80 shadow-[0_0_10px_var(--cyan-glow)] ${className}`}
-      aria-hidden
-    />
   );
 }
 
@@ -131,12 +135,13 @@ function Field({
   trailing?: React.ReactNode;
 }) {
   return (
-    <label className="glass-input flex h-14 items-center gap-3 rounded-xl px-4">
-      <span className="text-cyan-glow/80">{icon}</span>
+    <label className="glass-input holo-field group relative flex h-14 items-center gap-3 overflow-hidden rounded-xl px-4">
+      <span className="holo-shine" aria-hidden />
+      <span className="text-cyan-glow/80 transition group-focus-within:drop-shadow-[0_0_6px_var(--cyan-glow)]">{icon}</span>
       <input
         type={type}
         placeholder={placeholder}
-        className="h-full flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-none"
+        className="relative h-full flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-none"
       />
       {trailing}
     </label>
@@ -148,7 +153,7 @@ function SocialButton({ provider }: { provider: "google" | "facebook" }) {
   return (
     <button
       type="button"
-      className="glass-input flex h-12 items-center justify-center gap-2 rounded-xl px-2 text-[11px] font-medium tracking-wide text-foreground transition hover:border-cyan-glow/50"
+      className="glass-input flex h-12 items-center justify-center gap-2 rounded-xl px-2 text-[11px] font-medium tracking-wide text-foreground transition hover:scale-[1.02] hover:border-cyan-glow/60 hover:shadow-[0_0_18px_oklch(0.78_0.18_215/0.35)]"
     >
       {provider === "google" ? <GoogleIcon /> : <FacebookIcon />}
       <span className="truncate">{label}</span>

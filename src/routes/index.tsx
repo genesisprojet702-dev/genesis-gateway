@@ -54,7 +54,7 @@ function SignUp() {
                   className="text-cyan-glow/70 transition hover:text-cyan-glow"
                   aria-label="Afficher le mot de passe"
                 >
-                  {showPw ? <EyeOff strokeWidth={1.5} className="h-5 w-5" /> : <Eye strokeWidth={1.5} className="h-5 w-5" />}
+                  {showPw ? <Eye strokeWidth={1.5} className="h-5 w-5" /> : <EyeOff strokeWidth={1.5} className="h-5 w-5" />}
                 </button>
               }
             />
@@ -69,7 +69,7 @@ function SignUp() {
                   className="text-cyan-glow/70 transition hover:text-cyan-glow"
                   aria-label="Afficher le mot de passe"
                 >
-                  {showPw2 ? <EyeOff strokeWidth={1.5} className="h-5 w-5" /> : <Eye strokeWidth={1.5} className="h-5 w-5" />}
+                  {showPw2 ? <Eye strokeWidth={1.5} className="h-5 w-5" /> : <EyeOff strokeWidth={1.5} className="h-5 w-5" />}
                 </button>
               }
             />
@@ -151,12 +151,13 @@ function Field({
   trailing?: React.ReactNode;
 }) {
   return (
-    <label className="glass-input flex h-14 items-center gap-3 rounded-xl px-4">
-      <span className="text-cyan-glow/80">{icon}</span>
+    <label className="glass-input holo-field group relative flex h-14 items-center gap-3 overflow-hidden rounded-xl px-4">
+      <span className="holo-shine" aria-hidden />
+      <span className="text-cyan-glow/80 transition group-focus-within:drop-shadow-[0_0_6px_var(--cyan-glow)]">{icon}</span>
       <input
         type={type}
         placeholder={placeholder}
-        className="h-full flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-none"
+        className="relative h-full flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-none"
       />
       {trailing}
     </label>
