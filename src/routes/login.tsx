@@ -57,33 +57,13 @@ function Login() {
               icon={<Lock strokeWidth={1.5} className="h-5 w-5" />}
               placeholder="Mot de passe"
               type={showPw ? "text" : "password"}
-              trailing={
-                <button
-                  type="button"
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={(e) => { e.stopPropagation(); setShowPw((s) => !s); }}
-                  className="relative z-10 text-cyan-glow/70 transition hover:text-cyan-glow"
-                  aria-label={showPw ? "Masquer le mot de passe" : "Afficher le mot de passe"}
-                >
-                  {showPw ? <Eye strokeWidth={1.5} className="h-5 w-5" /> : <EyeOff strokeWidth={1.5} className="h-5 w-5" />}
-                </button>
-              }
+              trailing={<PasswordEyeButton visible={showPw} onToggle={() => setShowPw((s) => !s)} />}
             />
             <Field
               icon={<Lock strokeWidth={1.5} className="h-5 w-5" />}
               placeholder="Confirmer le mot de passe"
               type={showPw2 ? "text" : "password"}
-              trailing={
-                <button
-                  type="button"
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={(e) => { e.stopPropagation(); setShowPw2((s) => !s); }}
-                  className="relative z-10 text-cyan-glow/70 transition hover:text-cyan-glow"
-                  aria-label={showPw2 ? "Masquer le mot de passe" : "Afficher le mot de passe"}
-                >
-                  {showPw2 ? <Eye strokeWidth={1.5} className="h-5 w-5" /> : <EyeOff strokeWidth={1.5} className="h-5 w-5" />}
-                </button>
-              }
+              trailing={<PasswordEyeButton visible={showPw2} onToggle={() => setShowPw2((s) => !s)} />}
             />
 
             <button
@@ -153,10 +133,29 @@ function Field({
       <input
         type={type}
         placeholder={placeholder}
-        className="relative h-full flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-none"
+        className="relative h-full min-w-0 flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-none"
       />
-      {trailing}
+      {trailing ? <span className="relative z-20 -mr-2 flex h-10 w-10 shrink-0 items-center justify-center">{trailing}</span> : null}
     </label>
+  );
+}
+
+function PasswordEyeButton({ visible, onToggle }: { visible: boolean; onToggle: () => void }) {
+  return (
+    <button
+      type="button"
+      onMouseDown={(e) => e.preventDefault()}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onToggle();
+      }}
+      className="flex h-10 w-10 items-center justify-center rounded-full text-cyan-glow/80 transition hover:bg-cyan-glow/10 hover:text-cyan-glow hover:drop-shadow-[0_0_8px_var(--cyan-glow)]"
+      aria-label={visible ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+      aria-pressed={visible}
+    >
+      {visible ? <Eye strokeWidth={1.5} className="h-5 w-5" /> : <EyeOff strokeWidth={1.5} className="h-5 w-5" />}
+    </button>
   );
 }
 
