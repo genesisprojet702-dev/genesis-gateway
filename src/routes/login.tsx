@@ -47,7 +47,7 @@ function Login() {
 
       <main className="relative z-10 mx-auto flex min-h-screen w-full max-w-md flex-col px-6">
         {/* Reserve space for logo + GENESIS + "BON RETOUR" baked into the image */}
-        <div className="h-[48vh] shrink-0" />
+        <div className="h-[32vh] shrink-0" />
 
         {/* Opaque panel — matches the signup page's glass-panel style */}
         <section className="holo-rise glass-panel relative mt-2 rounded-2xl p-5">
